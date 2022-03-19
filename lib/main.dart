@@ -1,52 +1,130 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-      MaterialApp(
-      title: 'Named Route',
-      initialRoute: '/',
-      routes: {
-        '/':(context) => const LayarPertama(),
+void main() => runApp(const FisrtRun());
 
-        '/kedua':(context) => const LayarKedua(),
-      },
-     )
-  );
+
+class ScreenArguments {
+  final String title;
+  final String message;
+
+  ScreenArguments(this.title, this.message);
 }
 
-class LayarPertama extends StatelessWidget {
-  const LayarPertama({ Key? key }) : super(key: key);
+class FisrtRun extends StatelessWidget {
+  const FisrtRun({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      routes: {
+        ExtractArgumentsScreen.routeName: (context) =>
+            const ExtractArgumentsScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == PassArgumentsScreen.routeName) {
+          final args = settings.arguments as ScreenArguments;
+          return MaterialPageRoute(
+            builder: (context) {
+              return PassArgumentsScreen(
+                title: args.title,
+                message: args.message,
+              );
+            },
+          );
+        }
+        assert(false, 'Need to implement ${settings.name}');
+        return null;
+      },
+      title: 'Navigation with Arguments',
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Layar Pertama'),
+        title: const Text('Home Screen'),
       ),
       body: Center(
-        child: ElevatedButton(onPressed: () {
-          Navigator.pushNamed(context, '/kedua');
-        }, child: const Text('Buka Layar')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  ExtractArgumentsScreen.routeName,
+                  arguments: ScreenArguments(
+                    'Extract Arguments Screen','This message is extracted in the build method.',
+                  ),
+                );
+              },
+              child: const Text('Navigate to screen that extracts arguments'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  PassArgumentsScreen.routeName,
+                  arguments: ScreenArguments(
+                    'Accept Arguments Screen', 'This message is extracted in the onGenerateRoute ' 'function.',
+                  ),
+                );
+              },
+              child: const Text('Navigate to a named that accepts arguments'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class LayarKedua extends StatelessWidget {
-  const LayarKedua({ Key? key }) : super(key: key);
+class ExtractArgumentsScreen extends StatelessWidget {
+  const ExtractArgumentsScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/extractArguments';
+
+  @override
+  Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(args.title),
+      ),
+      body: Center(
+        child: Text(args.message),
+      ),
+    );
+  }
+}
+
+class PassArgumentsScreen extends StatelessWidget {
+  static const routeName = '/passArguments';
+
+  final String title;
+  final String message;
+
+  const PassArgumentsScreen({
+    Key? key,
+    required this.title,
+    required this.message,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Layar Kedua'),
+        title: Text(title),
       ),
       body: Center(
-        child: ElevatedButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: const Text('Kembali')),
+        child: Text(message),
       ),
     );
   }
