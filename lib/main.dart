@@ -1,49 +1,52 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(const MaterialApp(
-    title: 'Navigasi',
-    home: RutePertama(),
-  ));
+void main() {
+  runApp(
+      MaterialApp(
+      title: 'Named Route',
+      initialRoute: '/',
+      routes: {
+        '/':(context) => const LayarPertama(),
+
+        '/kedua':(context) => const LayarKedua(),
+      },
+     )
+  );
 }
 
-class RutePertama extends StatelessWidget {
-  const RutePertama({ Key? key }) : super(key: key);
+class LayarPertama extends StatelessWidget {
+  const LayarPertama({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rute Pertama'),
+        title: const Text('Layar Pertama'),
       ),
       body: Center(
-        child: SizedBox(
-          height: 40,
-          child: ElevatedButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => RuteKedua(), ) );
-          }, child: const Text('Buka Halaman Selanjutnya')),
-        ),
+        child: ElevatedButton(onPressed: () {
+          Navigator.pushNamed(context, '/kedua');
+        }, child: const Text('Buka Layar')),
       ),
     );
   }
 }
 
-class RuteKedua extends StatelessWidget {
-  const RuteKedua({ Key? key }) : super(key: key);
+class LayarKedua extends StatelessWidget {
+  const LayarKedua({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rute Kedua'),
+        title: const Text('Layar Kedua'),
       ),
       body: Center(
-        child: SizedBox(
-          height: 40,
-          child: ElevatedButton(onPressed: () {
-            Navigator.pop(context);
-          }, child: const Text('Kembali Ke Halaman Pertama')),
-        ),
+        child: ElevatedButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: const Text('Kembali')),
       ),
     );
   }
