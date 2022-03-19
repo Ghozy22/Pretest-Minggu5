@@ -1,55 +1,48 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const heroWidged());
-
-class heroWidged extends StatelessWidget {
-  const heroWidged({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Pretest 1',
-      home: layarPertama(),
-    );
-  }
+void main(){
+  runApp(const MaterialApp(
+    title: 'Navigasi',
+    home: RutePertama(),
+  ));
 }
 
-class layarPertama extends StatelessWidget {
-  const layarPertama({ Key? key }) : super(key: key);
+class RutePertama extends StatelessWidget {
+  const RutePertama({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Super Idol'),
+        title: const Text('Rute Pertama'),
       ),
-      body: GestureDetector(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const layarKedua();
-          }));
-        },
-        child: Hero(tag: 'ImageHero', child: SizedBox(
-          width: 350,
-          height: 350,
-          child: Image.network('https://i1.sndcdn.com/artworks-WtprKetUCUTy1egz-VhNMjQ-t500x500.jpg'))),
+      body: Center(
+        child: SizedBox(
+          height: 40,
+          child: ElevatedButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => RuteKedua(), ) );
+          }, child: const Text('Buka Halaman Selanjutnya')),
+        ),
       ),
     );
   }
 }
 
-class layarKedua extends StatelessWidget {
-  const layarKedua({ Key? key }) : super(key: key);
+class RuteKedua extends StatelessWidget {
+  const RuteKedua({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Center(
-          child: Hero(tag: 'ImageHero', child: Image.network('https://i1.sndcdn.com/artworks-WtprKetUCUTy1egz-VhNMjQ-t500x500.jpg')),
+      appBar: AppBar(
+        title: const Text('Rute Kedua'),
+      ),
+      body: Center(
+        child: SizedBox(
+          height: 40,
+          child: ElevatedButton(onPressed: () {
+            Navigator.pop(context);
+          }, child: const Text('Kembali Ke Halaman Pertama')),
         ),
       ),
     );
